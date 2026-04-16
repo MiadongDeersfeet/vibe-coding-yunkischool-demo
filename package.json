@@ -1,0 +1,11 @@
+{
+  "name": "noor-tour",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix server start",
+    "postinstall": "npm install --prefix server --omit=dev"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}

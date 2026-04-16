@@ -4,16 +4,10 @@
   "stack": "heroku-24",
   "buildpacks": [
     {
-      "url": "https://github.com/lstoll/heroku-buildpack-monorepo"
-    },
-    {
       "url": "heroku/nodejs"
     }
   ],
   "env": {
-    "APP_BASE": {
-      "value": "server"
-    },
     "NODE_ENV": {
       "value": "production"
     }
