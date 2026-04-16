@@ -1,0 +1,181 @@
+.lecture-detail-page {
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #161616;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.lecture-detail-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+.lecture-detail-header {
+  margin-bottom: 16px;
+}
+
+.lecture-detail-back {
+  display: inline-flex;
+  align-items: center;
+  color: #6d28d9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lecture-detail-back:hover {
+  text-decoration: underline;
+}
+
+.lecture-detail-card {
+  display: flex;
+  gap: 22px;
+  background: #fff;
+  border: 1px solid #eee9ff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.lecture-detail-thumb-wrap {
+  width: 280px;
+  max-width: 42%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.lecture-detail-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.lecture-detail-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.lecture-detail-body h1 {
+  margin: 2px 0 8px;
+  color: #3f1a8a;
+  font-size: 28px;
+}
+
+.lecture-detail-instructor {
+  margin: 0 0 8px;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.lecture-detail-price {
+  margin: 0 0 14px;
+  color: #4c1d95;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.lecture-detail-short {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.lecture-detail-description-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #ece8ff;
+}
+
+.lecture-detail-description-section h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.lecture-detail-description {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  color: #333;
+}
+
+.lecture-detail-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+}
+
+.lecture-detail-btn {
+  border: 1px solid #ddd6fe;
+  border-radius: 10px;
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lecture-detail-like-btn {
+  background: #fff;
+  border-color: #ffd1de;
+  color: #f43f7b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lecture-detail-like-btn .heart-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.lecture-detail-like-btn.is-liked {
+  background: linear-gradient(135deg, #fd1d1d, #f56040, #f77737, #fcaf45);
+  border-color: transparent;
+  color: #fff;
+}
+
+.lecture-detail-pay-btn {
+  background: #6d28d9;
+  color: #fff;
+  border-color: #6d28d9;
+}
+
+.lecture-detail-pay-btn:hover {
+  background: #5b21b6;
+}
+
+.lecture-detail-payment-message {
+  margin: 12px 0 0;
+  color: #4c1d95;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.lecture-detail-empty,
+.lecture-detail-error {
+  margin: 0;
+  background: #fff;
+  border: 1px solid #eee9ff;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.lecture-detail-error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+@media (max-width: 800px) {
+  .lecture-detail-card {
+    flex-direction: column;
+  }
+
+  .lecture-detail-thumb-wrap {
+    width: 100%;
+    max-width: 100%;
+  }
+}

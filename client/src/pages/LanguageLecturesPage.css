@@ -1,0 +1,256 @@
+.language-lectures-page {
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #161616;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.language-lectures-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.language-lectures-header {
+  margin-bottom: 28px;
+}
+
+.language-lectures-back {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #6d28d9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.language-lectures-back:hover {
+  text-decoration: underline;
+}
+
+.language-lectures-title-block h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  color: #4c1d95;
+}
+
+.language-lectures-sub {
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.language-lectures-list-section {
+  background: #fff;
+  border: 1px solid #eee9ff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.language-lectures-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ece8ff;
+}
+
+.language-lectures-list-head h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.language-lectures-count {
+  font-size: 14px;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.language-lectures-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.language-lectures-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.language-lectures-error {
+  margin: 0 0 16px;
+  color: #b91c1c;
+}
+
+.language-lectures-fetch-error {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.language-lecture-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid #ece8ff;
+}
+
+.language-lecture-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.language-lecture-thumb-wrap {
+  flex-shrink: 0;
+  width: 120px;
+  height: 90px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background: #fafafa;
+}
+
+.language-lecture-main {
+  display: flex;
+  gap: 16px;
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+  padding: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.language-lecture-main:hover {
+  background: #f8f5ff;
+}
+
+.language-lecture-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.language-lecture-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.language-lecture-title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  color: #222;
+}
+
+.language-lecture-instructor {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.language-lecture-short {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.45;
+}
+
+.language-lecture-price {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #4c1d95;
+}
+
+.language-lecture-open-hint {
+  margin: 8px 0 0;
+  color: #7c3aed;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.language-lecture-actions {
+  width: 132px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lecture-action-btn {
+  border-radius: 10px;
+  min-height: 38px;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.lecture-action-btn {
+  border: 1px solid #ddd6fe;
+  background: #faf7ff;
+  color: #4c1d95;
+  cursor: pointer;
+}
+
+.lecture-action-btn:hover {
+  background: #f1ebff;
+}
+
+.lecture-pay-btn {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: #fff;
+}
+
+.lecture-pay-btn:hover {
+  background: #5b21b6;
+}
+
+.lecture-like-btn {
+  background: #fff;
+  border-color: #ffd1de;
+  color: #f43f7b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lecture-like-btn .heart-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.lecture-like-btn.is-liked {
+  background: linear-gradient(135deg, #fd1d1d, #f56040, #f77737, #fcaf45);
+  border-color: transparent;
+  color: #fff;
+}
+
+.language-lectures-payment-message {
+  margin: 14px 0 0;
+  color: #4c1d95;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .language-lecture-item {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .language-lecture-actions {
+    width: 100%;
+  }
+}

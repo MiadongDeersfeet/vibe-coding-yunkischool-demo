@@ -1,0 +1,150 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #eef6ff, #f8fafc);
+  padding: 24px;
+}
+
+.login-card {
+  width: min(460px, 100%);
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.1);
+}
+
+.login-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #1d4ed8;
+}
+
+.login-header p {
+  margin: 8px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.login-form {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.login-form input {
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.login-form button {
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.form-message {
+  margin: 0;
+  font-size: 13px;
+}
+
+.form-message.error {
+  color: #dc2626;
+}
+
+.form-message.success {
+  color: #059669;
+}
+
+.login-links {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.login-links a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.login-success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.login-success-modal {
+  width: min(420px, 100%);
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.28);
+  text-align: center;
+}
+
+.success-badge {
+  margin: 0;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.login-success-modal h2 {
+  margin: 10px 0 8px;
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.login-success-modal p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.login-success-modal button {
+  margin-top: 18px;
+  min-width: 120px;
+  height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}

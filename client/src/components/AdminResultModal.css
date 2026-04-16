@@ -1,0 +1,59 @@
+.admin-result-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(17, 17, 17, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.admin-result-modal {
+  width: 100%;
+  max-width: 400px;
+  padding: 22px 22px 18px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 48px rgba(76, 29, 149, 0.18);
+  border: 1px solid #ede9fe;
+}
+
+.admin-result-modal__title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.admin-result-modal__title--success {
+  color: #4c1d95;
+}
+
+.admin-result-modal__title--error {
+  color: #b91c1c;
+}
+
+.admin-result-modal__message {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+.admin-result-modal__btn {
+  width: 100%;
+  height: 42px;
+  border: 0;
+  border-radius: 10px;
+  background: #6d28d9;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.admin-result-modal__btn:hover {
+  background: #5b21b6;
+}

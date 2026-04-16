@@ -1,0 +1,272 @@
+.admin-page {
+  max-width: 840px;
+  margin: 32px auto;
+  padding: 0 16px 32px;
+}
+
+.admin-page--gate {
+  min-height: 40vh;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.admin-header-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: #4c1d95;
+}
+
+.admin-home-link {
+  text-decoration: none;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.admin-description {
+  margin: 0 0 18px;
+  color: #555;
+}
+
+.admin-category-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.admin-category-tab {
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-category-tab.is-active {
+  background: #6d28d9;
+  color: #fff;
+}
+
+.admin-form {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-form label {
+  display: grid;
+  gap: 6px;
+  color: #333;
+  font-weight: 600;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.admin-checkbox-label {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.admin-checkbox-label input {
+  width: auto;
+  margin: 0;
+}
+
+.admin-form-message {
+  margin: 0;
+  font-size: 14px;
+  color: #4c1d95;
+  font-weight: 600;
+}
+
+.admin-upload-btn {
+  height: 38px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #f5f3ff;
+  color: #4c1d95;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-image-preview-wrap {
+  border: 1px solid #ede9fe;
+  border-radius: 10px;
+  background: #faf9ff;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-image-preview {
+  max-height: 240px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.admin-form button[type="submit"] {
+  height: 40px;
+  border: 0;
+  border-radius: 10px;
+  background: #6d28d9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-form button[type="submit"]:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.admin-list-section {
+  margin-top: 32px;
+  padding: 18px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-list-head h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.admin-refresh-btn {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-list-error {
+  margin: 0 0 12px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.admin-list-empty {
+  margin: 0;
+  padding: 20px 0;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-lecture-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-lecture-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.admin-lecture-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-lecture-main strong {
+  font-size: 15px;
+}
+
+.admin-lecture-meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.admin-delete-btn {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-lecture-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-edit-link {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-edit-danger-zone {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #ece8ff;
+}
+
+.admin-delete-btn-wide {
+  width: 100%;
+  max-width: 420px;
+}

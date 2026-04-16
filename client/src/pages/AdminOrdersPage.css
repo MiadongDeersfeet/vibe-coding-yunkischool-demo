@@ -1,0 +1,170 @@
+.admin-orders-page {
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 16px 32px;
+}
+
+.admin-orders-page--gate {
+  min-height: 40vh;
+}
+
+.admin-orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.admin-orders-header h1 {
+  margin: 0;
+  color: #4c1d95;
+}
+
+.admin-orders-header-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-orders-link {
+  text-decoration: none;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+.admin-orders-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.admin-orders-tab {
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-orders-tab.is-active {
+  background: #6d28d9;
+  color: #fff;
+}
+
+.admin-orders-list-section {
+  padding: 18px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-orders-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-orders-list-head h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.admin-orders-refresh {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-orders-error {
+  margin: 0 0 12px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.admin-orders-empty {
+  margin: 0;
+  padding: 20px 0;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-orders-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-orders-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.admin-orders-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-orders-main strong {
+  font-size: 15px;
+}
+
+.admin-orders-meta,
+.admin-orders-user,
+.admin-orders-date,
+.admin-orders-id {
+  font-size: 13px;
+  color: #666;
+}
+
+.admin-orders-side {
+  display: grid;
+  justify-items: end;
+  align-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.admin-orders-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .admin-orders-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-orders-side {
+    justify-items: start;
+  }
+}
