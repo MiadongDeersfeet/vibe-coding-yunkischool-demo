@@ -11,6 +11,7 @@ const PAYMENT_METHODS = new Set(["card", "bank_transfer", "kakaopay", "naverpay"
 const PORTONE_API_BASE = "https://api.iamport.kr";
 const PORTONE_VERIFY_RETRY_COUNT = 4;
 const PORTONE_VERIFY_RETRY_DELAY_MS = 500;
+const ALERT_WEBHOOK_URL = process.env.ALERT_WEBHOOK_URL || "";
 
 function buildLineFromLecture(lec) {
   return {
@@ -81,6 +82,66 @@ async function getPortOnePaymentByMerchantUid(merchantUid) {
     throw new Error(data?.message || "Failed to fetch payment by merchant_uid from PortOne.");
   }
   return payment;
+}
+
+async function cancelPortOnePayment({ impUid, amount, reason }) {
+  const token = await issuePortOneToken();
+  const payload = {
+    imp_uid: impUid,
+    reason: reason || "주문 처리 실패로 자동 환불",
+  };
+  if (Number(amount) > 0) {
+    payload.amount = Number(amount);
+  }
+
+  const res = await fetch(`${PORTONE_API_BASE}/payments/cancel`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data?.code !== 0) {
+    throw new Error(data?.message || "Failed to cancel payment on PortOne.");
+  }
+  return data?.response || null;
+}
+
+async function notifyOps(title, message, extra = {}) {
+  const payload = {
+    source: "orderController",
+    title,
+    message,
+    extra,
+    at: new Date().toISOString(),
+  };
+  console.error(`[OPS ALERT] ${title}: ${message}`, extra);
+  if (!ALERT_WEBHOOK_URL) return;
+  try {
+    await fetch(ALERT_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("[OPS ALERT] webhook delivery failed:", error?.message || error);
+  }
+}
+
+function mapPortOneToOrderStatus(status) {
+  if (status === "paid") return "paid";
+  if (status === "cancelled") return "refunded";
+  if (status === "failed") return "cancelled";
+  return "pending";
+}
+
+function mapPortOneToPaymentStatus(status) {
+  if (status === "paid") return "succeeded";
+  if (status === "cancelled") return "refunded";
+  if (status === "failed") return "failed";
+  return "pending";
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -199,14 +260,6 @@ const checkout = async (req, res) => {
           return res.status(400).json({ message: "현재 구매할 수 없는 도서입니다." });
         }
         const qty = Math.min(99, Math.max(1, Number(raw.quantity) || 1));
-        const already = await BookPurchase.findOne({
-          userId,
-          bookId: book._id,
-          revokedAt: null,
-        });
-        if (already) {
-          return res.status(409).json({ message: "이미 구매한 도서입니다." });
-        }
         const bookKey = String(book._id);
         if (seenBookIds.has(bookKey)) {
           return res.status(400).json({ message: "같은 도서가 주문에 중복되었습니다." });
@@ -314,14 +367,33 @@ const checkout = async (req, res) => {
         await BookPurchase.deleteMany({ orderId: order._id });
         await Order.findByIdAndDelete(order._id);
       }
+      let cancelFailureMessage = "";
+      const shouldAttemptCancel =
+        inner?.code !== 11000 && verifiedPayment && paymentGatewayResponse?.impUid;
+      if (shouldAttemptCancel) {
+        try {
+          await cancelPortOnePayment({
+            impUid: paymentGatewayResponse.impUid,
+            amount: Number(verifiedPayment.amount) || totalAmount,
+            reason: "주문 처리 실패로 자동 환불",
+          });
+        } catch (cancelError) {
+          cancelFailureMessage = ` 결제 취소에도 실패했습니다. 관리자 확인이 필요합니다. (${cancelError.message})`;
+          await notifyOps("결제 취소 실패", "주문 처리 실패 후 결제 취소에 실패했습니다.", {
+            impUid: paymentGatewayResponse.impUid,
+            merchantUid: paymentGatewayResponse.merchantUid,
+            reason: cancelError.message,
+          });
+        }
+      }
       if (inner.name === "ValidationError") {
-        return res.status(400).json({ message: inner.message });
+        return res.status(400).json({ message: `${inner.message}${cancelFailureMessage}` });
       }
       if (inner?.code === 11000) {
         return res.status(409).json({ message: "중복 결제 또는 중복 주문 요청입니다." });
       }
       const detail = inner?.message ? ` (${inner.message})` : "";
-      return res.status(500).json({ message: `주문 처리에 실패했습니다.${detail}` });
+      return res.status(500).json({ message: `주문 처리에 실패했습니다.${detail}${cancelFailureMessage}` });
     }
 
     const populated = await Order.findById(order._id).lean();
@@ -329,6 +401,82 @@ const checkout = async (req, res) => {
   } catch (error) {
     const detail = error?.message ? ` (${error.message})` : "";
     res.status(500).json({ message: `주문 처리에 실패했습니다.${detail}` });
+  }
+};
+
+const handlePortOneWebhook = async (req, res) => {
+  try {
+    const impUid = String(req.body?.imp_uid || req.body?.impUid || "").trim();
+    const merchantUid = String(req.body?.merchant_uid || req.body?.merchantUid || "").trim();
+    if (!impUid) {
+      return res.status(400).json({ message: "imp_uid is required." });
+    }
+
+    let verifiedPayment = null;
+    try {
+      verifiedPayment = await getPortOnePaymentWithRetry(impUid, merchantUid);
+    } catch (error) {
+      await notifyOps("포트원 웹훅 검증 실패", "웹훅 수신 후 결제 검증에 실패했습니다.", {
+        impUid,
+        merchantUid,
+        reason: error.message,
+      });
+      return res.status(400).json({ message: "결제 검증에 실패했습니다." });
+    }
+
+    const order = await Order.findOne({ "paymentGateway.impUid": impUid });
+    if (!order) {
+      await notifyOps("웹훅 주문 미매칭", "웹훅 결제에 해당하는 주문을 찾지 못했습니다.", {
+        impUid,
+        merchantUid: verifiedPayment?.merchant_uid || merchantUid,
+        status: verifiedPayment?.status || "",
+      });
+      return res.status(202).json({ ok: true, message: "order not found; alert sent" });
+    }
+
+    const remoteStatus = String(verifiedPayment.status || "").trim();
+    const nextOrderStatus = mapPortOneToOrderStatus(remoteStatus);
+    const nextPaymentStatus = mapPortOneToPaymentStatus(remoteStatus);
+    const cancelDate = new Date();
+
+    order.status = nextOrderStatus;
+    order.paymentGateway = {
+      ...order.paymentGateway,
+      impUid,
+      merchantUid: String(verifiedPayment.merchant_uid || order.paymentGateway?.merchantUid || ""),
+      paidAmount: Number(verifiedPayment.amount) || Number(order.paymentGateway?.paidAmount) || 0,
+      status: remoteStatus || String(order.paymentGateway?.status || ""),
+      raw: verifiedPayment,
+    };
+    await order.save();
+
+    await Payment.updateMany(
+      { providerPaymentId: impUid },
+      {
+        $set: {
+          status: nextPaymentStatus,
+          paidAt: nextPaymentStatus === "succeeded" ? new Date() : null,
+        },
+      }
+    );
+
+    if (nextOrderStatus !== "paid") {
+      await LecturePurchase.updateMany({ orderId: order._id, revokedAt: null }, { $set: { revokedAt: cancelDate } });
+      await BookPurchase.updateMany({ orderId: order._id, revokedAt: null }, { $set: { revokedAt: cancelDate } });
+    }
+
+    res.status(200).json({
+      ok: true,
+      orderId: String(order._id),
+      orderStatus: nextOrderStatus,
+      paymentStatus: nextPaymentStatus,
+    });
+  } catch (error) {
+    await notifyOps("포트원 웹훅 처리 실패", "웹훅 처리 중 예외가 발생했습니다.", {
+      reason: error.message,
+      body: req.body || null,
+    });
+    res.status(500).json({ message: "웹훅 처리에 실패했습니다." });
   }
 };
 
@@ -464,4 +612,5 @@ module.exports = {
   getOrderById,
   listMyOrders,
   listAllOrderItemsForAdmin,
+  handlePortOneWebhook,
 };

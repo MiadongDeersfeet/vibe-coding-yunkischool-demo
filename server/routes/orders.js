@@ -1,11 +1,17 @@
 const express = require("express");
 const requireAuth = require("../middleware/requireAuth");
 const requireAdmin = require("../middleware/requireAdmin");
-const { checkout, getOrderById, listAllOrderItemsForAdmin } = require("../controllers/orderController");
+const {
+  checkout,
+  getOrderById,
+  listAllOrderItemsForAdmin,
+  handlePortOneWebhook,
+} = require("../controllers/orderController");
 
 const router = express.Router();
 
 router.post("/checkout", requireAuth, checkout);
+router.post("/webhook/portone", handlePortOneWebhook);
 router.get("/admin/items", requireAdmin, listAllOrderItemsForAdmin);
 router.get("/:id", requireAuth, getOrderById);
 
