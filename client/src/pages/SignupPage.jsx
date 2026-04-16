@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../api";
 import "./SignupPage.css";
 
 const initialForm = {
@@ -48,7 +49,7 @@ function SignupPage() {
 
     try {
       const { confirmPassword, ...payload } = form;
-      const response = await fetch("http://localhost:5000/api/users", {
+      const response = await fetch(apiUrl("/api/users"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

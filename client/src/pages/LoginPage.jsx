@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { apiUrl } from "../api";
 import "./LoginPage.css";
 
 const initialForm = {
@@ -45,7 +46,7 @@ function LoginPage() {
         password: form.password,
       };
 
-      const response = await fetch("http://localhost:5000/api/users/login", {
+      const response = await fetch(apiUrl("/api/users/login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
