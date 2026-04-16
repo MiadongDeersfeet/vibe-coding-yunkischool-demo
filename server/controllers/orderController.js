@@ -35,6 +35,31 @@ function buildLineFromBook(book, quantity) {
   };
 }
 
+async function hasActiveLecturePurchase(userId, lectureId) {
+  const activePurchase = await LecturePurchase.findOne({
+    userId,
+    lectureId,
+    revokedAt: null,
+  }).lean();
+  if (activePurchase) return true;
+
+  // Fallback guard: even if purchase rows are missing, block re-purchase
+  // when a paid order already contains this lecture.
+  const paidOrder = await Order.findOne({
+    userId,
+    status: "paid",
+    items: {
+      $elemMatch: {
+        itemType: "lecture",
+        lectureId,
+      },
+    },
+  })
+    .select("_id")
+    .lean();
+  return Boolean(paidOrder);
+}
+
 async function issuePortOneToken() {
   const restApiKey = process.env.PORTONE_REST_API_KEY || process.env.IAMPORT_REST_API_KEY || "";
   const restApiSecret = process.env.PORTONE_REST_API_SECRET || process.env.IAMPORT_REST_API_SECRET || "";
@@ -232,11 +257,7 @@ const checkout = async (req, res) => {
         if (!lec.isActive) {
           return res.status(400).json({ message: "판매 중이 아닌 강의입니다." });
         }
-        const already = await LecturePurchase.findOne({
-          userId,
-          lectureId: lec._id,
-          revokedAt: null,
-        });
+        const already = await hasActiveLecturePurchase(userId, lec._id);
         if (already) {
           return res.status(409).json({ message: "이미 구매한 강의입니다." });
         }
@@ -444,11 +465,7 @@ const precheckCheckout = async (req, res) => {
         if (!lec.isActive) {
           return res.status(400).json({ message: "판매 중이 아닌 강의입니다." });
         }
-        const already = await LecturePurchase.findOne({
-          userId,
-          lectureId: lec._id,
-          revokedAt: null,
-        });
+        const already = await hasActiveLecturePurchase(userId, lec._id);
         if (already) {
           return res.status(409).json({ message: "이미 구매한 강의입니다." });
         }
