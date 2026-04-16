@@ -26,6 +26,16 @@ const corsOptions =
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "2mb" }));
+
+// Heroku root URL (no /api) is often opened in browser; avoid noisy 404 in console.
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    ok: true,
+    message: "Noor Tour API",
+    health: "/api/health",
+  });
+});
+
 app.use("/api", routes);
 
 module.exports = app;
