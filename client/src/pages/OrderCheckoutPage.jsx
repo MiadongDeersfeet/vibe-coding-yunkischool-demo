@@ -270,6 +270,22 @@ function OrderCheckoutPage() {
 
     setSubmitting(true);
     try {
+      const precheckRes = await fetch(apiUrl("/api/orders/precheck"), {
+        method: "POST",
+        headers: jsonAuthHeaders(),
+        body: JSON.stringify({
+          items,
+          paymentMethod,
+          shippingInfo: shippingRequired ? shippingInfo : undefined,
+          expectedAmount: Number(lineTotal),
+        }),
+      });
+      const precheckData = await precheckRes.json().catch(() => ({}));
+      if (!precheckRes.ok) {
+        throw new Error(precheckData.message || "결제 전 주문 검증에 실패했습니다.");
+      }
+      const validatedAmount = Number(precheckData.totalAmount) || Number(lineTotal);
+
       const authUserRaw = localStorage.getItem("authUser");
       let authUser = null;
       try {
@@ -297,7 +313,7 @@ function OrderCheckoutPage() {
             pay_method: gatewayConfig.pay_method,
             merchant_uid: merchantUid,
             name: title,
-            amount: Number(lineTotal),
+            amount: validatedAmount,
             buyer_email: buyerEmail,
             buyer_name: buyerName,
             buyer_tel: buyerTel,

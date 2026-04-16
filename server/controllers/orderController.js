@@ -404,6 +404,124 @@ const checkout = async (req, res) => {
   }
 };
 
+const precheckCheckout = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const {
+      items: rawItems,
+      paymentMethod: rawPaymentMethod,
+      shippingInfo: rawShippingInfo,
+      expectedAmount: rawExpectedAmount,
+    } = req.body || {};
+    const paymentMethod = String(rawPaymentMethod || "card");
+
+    if (!Array.isArray(rawItems) || rawItems.length === 0) {
+      return res.status(400).json({ message: "주문 품목이 비어 있습니다." });
+    }
+    if (rawItems.length > MAX_ITEMS) {
+      return res.status(400).json({ message: `한 번에 주문할 수 있는 품목은 최대 ${MAX_ITEMS}개입니다.` });
+    }
+    if (!PAYMENT_METHODS.has(paymentMethod)) {
+      return res.status(400).json({ message: "지원하지 않는 결제수단입니다." });
+    }
+
+    const normalized = [];
+    const seenLectureIds = new Set();
+    const seenBookIds = new Set();
+    let hasBookLine = false;
+
+    for (const raw of rawItems) {
+      const itemType = raw.itemType;
+      if (itemType === "lecture") {
+        const lid = raw.lectureId;
+        if (!mongoose.Types.ObjectId.isValid(String(lid))) {
+          return res.status(400).json({ message: "유효하지 않은 강의 id입니다." });
+        }
+        const lec = await Lecture.findById(lid);
+        if (!lec) {
+          return res.status(404).json({ message: "강의를 찾을 수 없습니다." });
+        }
+        if (!lec.isActive) {
+          return res.status(400).json({ message: "판매 중이 아닌 강의입니다." });
+        }
+        const already = await LecturePurchase.findOne({
+          userId,
+          lectureId: lec._id,
+          revokedAt: null,
+        });
+        if (already) {
+          return res.status(409).json({ message: "이미 구매한 강의입니다." });
+        }
+        const lecKey = String(lec._id);
+        if (seenLectureIds.has(lecKey)) {
+          return res.status(400).json({ message: "같은 강의가 주문에 중복되었습니다." });
+        }
+        seenLectureIds.add(lecKey);
+        normalized.push(buildLineFromLecture(lec));
+      } else if (itemType === "book") {
+        hasBookLine = true;
+        const bid = raw.bookId;
+        if (!mongoose.Types.ObjectId.isValid(String(bid))) {
+          return res.status(400).json({ message: "유효하지 않은 도서 id입니다." });
+        }
+        const book = await Book.findById(bid);
+        if (!book) {
+          return res.status(404).json({ message: "도서를 찾을 수 없습니다." });
+        }
+        if (book.purchasable === false) {
+          return res.status(400).json({ message: "현재 구매할 수 없는 도서입니다." });
+        }
+        const qty = Math.min(99, Math.max(1, Number(raw.quantity) || 1));
+        const bookKey = String(book._id);
+        if (seenBookIds.has(bookKey)) {
+          return res.status(400).json({ message: "같은 도서가 주문에 중복되었습니다." });
+        }
+        seenBookIds.add(bookKey);
+        normalized.push(buildLineFromBook(book, qty));
+      } else {
+        return res.status(400).json({ message: "itemType은 lecture 또는 book 이어야 합니다." });
+      }
+    }
+
+    const shippingInfo = {
+      recipientName: String(rawShippingInfo?.recipientName || "").trim(),
+      contact: String(rawShippingInfo?.contact || "").trim(),
+      address: String(rawShippingInfo?.address || "").trim(),
+      addressDetail: String(rawShippingInfo?.addressDetail || "").trim(),
+      postalCode: String(rawShippingInfo?.postalCode || "").trim(),
+    };
+    if (hasBookLine) {
+      if (
+        !shippingInfo.recipientName ||
+        !shippingInfo.contact ||
+        !shippingInfo.address ||
+        !shippingInfo.addressDetail ||
+        !shippingInfo.postalCode
+      ) {
+        return res.status(400).json({ message: "도서 주문에는 이름/연락처/주소/상세주소/우편번호가 필요합니다." });
+      }
+    }
+
+    const totalAmount = normalized.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
+    const expectedAmount = Number(rawExpectedAmount) || 0;
+    if (expectedAmount > 0 && Math.abs(expectedAmount - totalAmount) > 0.001) {
+      return res.status(409).json({
+        message: "상품 금액이 변경되어 결제를 진행할 수 없습니다. 최신 금액으로 다시 시도해 주세요.",
+        totalAmount,
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      totalAmount,
+      paymentMethod,
+      shippingRequired: hasBookLine,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "주문 사전 검증에 실패했습니다." });
+  }
+};
+
 const handlePortOneWebhook = async (req, res) => {
   try {
     const impUid = String(req.body?.imp_uid || req.body?.impUid || "").trim();
@@ -609,6 +727,7 @@ const listAllOrderItemsForAdmin = async (_req, res) => {
 
 module.exports = {
   checkout,
+  precheckCheckout,
   getOrderById,
   listMyOrders,
   listAllOrderItemsForAdmin,
