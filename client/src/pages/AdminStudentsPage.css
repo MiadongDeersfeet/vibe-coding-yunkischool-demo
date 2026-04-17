@@ -1,0 +1,143 @@
+.admin-students-page {
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 16px 36px;
+}
+
+.admin-students-page--gate {
+  min-height: 40vh;
+}
+
+.admin-students-header h1 {
+  margin: 0;
+  color: #4c1d95;
+}
+
+.admin-students-header p {
+  margin: 8px 0 0;
+  color: #555;
+}
+
+.admin-students-search {
+  margin-top: 2px;
+  padding: 16px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-students-helper {
+  margin: 0;
+  color: #92400e;
+  font-size: 13px;
+}
+
+.admin-students-error {
+  margin: 10px 0 0;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.admin-students-list-wrap {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-students-empty {
+  margin: 0;
+  color: #666;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.admin-students-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-students-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.admin-students-row-main {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.admin-students-row-main strong {
+  font-size: 15px;
+  color: #111;
+}
+
+.admin-students-row-main span {
+  color: #666;
+  font-size: 13px;
+}
+
+.admin-students-preview-btn {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #c4b5fd;
+  border-radius: 8px;
+  background: #f5f3ff;
+  color: #5b21b6;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.admin-students-pagination {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.admin-students-pagination button {
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-students-pagination button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-students-pagination span {
+  min-width: 64px;
+  text-align: center;
+  color: #555;
+}
+
+@media (max-width: 760px) {
+  .admin-students-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -124,31 +124,84 @@ body {
 
 .quick-menu-row {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 18px;
+}
+
+.quick-menu-item-wrap {
+  position: relative;
 }
 
 .quick-menu-item {
   border: 1px solid #ece8ff;
   background: #fff;
   border-radius: 14px;
-  height: 70px;
-  display: flex;
-  flex-direction: column;
+  height: 56px;
+  display: inline-flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #333;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.menu-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+.quick-menu-item:hover {
+  border-color: #d4c9ff;
+  color: #4c1d95;
+}
+
+.quick-menu-item.is-open {
+  border-color: #b7a2ff;
+  color: #4c1d95;
+}
+
+.menu-caret {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #b7b7b7;
+  margin-top: 2px;
+}
+
+.quick-menu-item.is-open .menu-caret {
+  transform: rotate(180deg);
+}
+
+.quick-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 15;
+  width: 100%;
+  min-width: 140px;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid #e8dfff;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(76, 29, 149, 0.14);
+}
+
+.quick-menu-dropdown-item {
+  border: 1px solid #ede9ff;
+  border-radius: 10px;
+  background: #faf8ff;
+  color: #4c1d95;
+  font-size: 14px;
+  font-weight: 600;
+  height: 36px;
+  cursor: pointer;
+}
+
+.quick-menu-dropdown-item:hover {
+  border-color: #c8b8ff;
+  background: #f3eeff;
 }
 
 .content-area {
@@ -475,7 +528,7 @@ body {
   }
 
   .quick-menu-row {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .card-grid {
@@ -487,6 +540,12 @@ body {
   }
 
   .book-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .quick-menu-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

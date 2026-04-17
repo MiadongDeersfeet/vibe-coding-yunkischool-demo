@@ -1,0 +1,152 @@
+.admin-catalog-page {
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 16px 36px;
+}
+
+.admin-catalog-page--gate {
+  min-height: 40vh;
+}
+
+.admin-catalog-header h1 {
+  margin: 0;
+  color: #4c1d95;
+}
+
+.admin-catalog-section {
+  margin-top: 2px;
+  padding: 18px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-catalog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.admin-catalog-head h2 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.admin-catalog-refresh {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-catalog-error {
+  margin: 0 0 12px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.admin-catalog-empty {
+  margin: 0;
+  padding: 20px 0;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-catalog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-catalog-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+.admin-catalog-open {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.admin-catalog-open strong {
+  font-size: 15px;
+  color: #111;
+}
+
+.admin-catalog-open span {
+  font-size: 13px;
+  color: #666;
+}
+
+.admin-catalog-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.admin-catalog-preview-btn,
+.admin-catalog-edit-link,
+.admin-catalog-delete-btn {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admin-catalog-preview-btn {
+  border: 1px solid #c4b5fd;
+  background: #f5f3ff;
+  color: #5b21b6;
+  cursor: pointer;
+}
+
+.admin-catalog-edit-link {
+  border: 1px solid #ded8fb;
+  background: #fff;
+  color: #6d28d9;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.admin-catalog-delete-btn {
+  border: 0;
+  background: #fef2f2;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .admin-catalog-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-catalog-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,26 @@
+.admin-top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 20px;
+}
+
+.admin-top-nav__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #ded8fb;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d28d9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-top-nav__item.is-active {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: #fff;
+}

@@ -1,12 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./MainPage.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchServerBooks, mergeBooksForDisplay } from "../data/booksMerge";
 
 const quickMenus = [
-  "언어강의",
-  "도서구매",
-  "관광통역가이드",
+  { label: "수강신청", menuType: "language-dropdown", hasArrow: true },
+  { label: "선생님", menuType: "teachers-page" },
+  { label: "수강후기", sectionType: "books" },
+  { label: "커뮤니티", hasArrow: true },
+  { label: "고객센터", hasArrow: true },
+];
+
+const languageQuickMenuItems = [
+  { key: "kr", label: "한국어" },
+  { key: "en", label: "영어" },
+  { key: "ar", label: "아랍어" },
+  { key: "he", label: "히브리어" },
 ];
 
 const sections = [
@@ -106,28 +115,31 @@ const makeCards = (count, prefix) =>
 function MainPage() {
   const BOOKS_PER_PAGE = 4;
   const BOOK_SWIPE_THRESHOLD = 40;
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const [bookPage, setBookPage] = useState(0);
   const [displayBooks, setDisplayBooks] = useState(() => mergeBooksForDisplay([]));
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const swipeStartX = useRef(null);
-  const userName = useMemo(() => {
+  const authUser = useMemo(() => {
     try {
       const raw = localStorage.getItem("authUser");
-      if (!raw) return "";
-      return JSON.parse(raw)?.name || "";
+      if (!raw) return null;
+      return JSON.parse(raw);
     } catch {
-      return "";
+      return null;
     }
   }, [token]);
 
+  const userName = authUser?.name || "";
+
   const isAdminUser = useMemo(() => {
-    if (!token) return false;
-    try {
-      return JSON.parse(localStorage.getItem("authUser") || "null")?.user_role === "admin";
-    } catch {
-      return false;
-    }
-  }, [token]);
+    return Boolean(token && authUser?.user_role === "admin");
+  }, [authUser, token]);
+
+  const isStudentUser = useMemo(() => {
+    return Boolean(token && authUser?.user_role === "student");
+  }, [authUser, token]);
 
   const isLoggedIn = Boolean(token);
 
@@ -188,6 +200,28 @@ function MainPage() {
     window.location.reload();
   };
 
+  const handleQuickMenuClick = (menu) => {
+    if (menu.menuType === "language-dropdown") {
+      setIsLanguageDropdownOpen((prev) => !prev);
+      return;
+    }
+    if (menu.menuType === "teachers-page") {
+      setIsLanguageDropdownOpen(false);
+      navigate("/teachers");
+      return;
+    }
+    setIsLanguageDropdownOpen(false);
+    if (!menu.sectionType) return;
+    const target = document.getElementById(`section-${menu.sectionType}`);
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleLanguageQuickMenuClick = (languageKey) => {
+    setIsLanguageDropdownOpen(false);
+    navigate(`/lectures?language=${languageKey}`);
+  };
+
   return (
     <div className="main-page">
       <header className="top-header">
@@ -229,18 +263,48 @@ function MainPage() {
                 마이페이지
               </Link>
             ) : null}
+            {isStudentUser ? (
+              <Link to="/my-lectures" className="signin-btn">
+                내강의실
+              </Link>
+            ) : null}
           </div>
           {isLoggedIn && userName ? <p className="welcome-text">{userName}님 환영합니다.</p> : null}
         </div>
       </header>
 
       <div className="quick-menu-row">
-        {quickMenus.map((menu) => (
-          <button key={menu} className="quick-menu-item">
-            <span className="menu-dot" />
-            {menu}
-          </button>
-        ))}
+        {quickMenus.map((menu) => {
+          const isLanguageDropdownMenu = menu.menuType === "language-dropdown";
+          return (
+            <div key={menu.label} className="quick-menu-item-wrap">
+              <button
+                type="button"
+                className={`quick-menu-item ${isLanguageDropdownMenu && isLanguageDropdownOpen ? "is-open" : ""}`}
+                onClick={() => handleQuickMenuClick(menu)}
+                aria-expanded={isLanguageDropdownMenu ? isLanguageDropdownOpen : undefined}
+                aria-haspopup={isLanguageDropdownMenu ? "menu" : undefined}
+              >
+                <span>{menu.label}</span>
+                {menu.hasArrow ? <span className="menu-caret" aria-hidden="true" /> : null}
+              </button>
+              {isLanguageDropdownMenu && isLanguageDropdownOpen ? (
+                <div className="quick-menu-dropdown" role="menu" aria-label="수강 신청 언어 선택">
+                  {languageQuickMenuItems.map((language) => (
+                    <button
+                      key={language.key}
+                      type="button"
+                      className="quick-menu-dropdown-item"
+                      onClick={() => handleLanguageQuickMenuClick(language.key)}
+                    >
+                      {language.label}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
 
       <main className="content-area">
@@ -260,6 +324,7 @@ function MainPage() {
           return (
             <section
               key={section.title}
+              id={`section-${section.type}`}
               className={`content-section ${isLanguageSection ? "language-section" : ""} ${isBookSection ? "book-section" : ""}`}
             >
               <div className="section-head">

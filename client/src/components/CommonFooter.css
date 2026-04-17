@@ -1,0 +1,39 @@
+.common-footer {
+  margin-top: 28px;
+  border-top: 1px solid #ece8ff;
+  background: #fff;
+}
+
+.common-footer__inner {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 22px 16px 26px;
+  display: grid;
+  gap: 8px;
+}
+
+.common-footer__headline {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #4c1d95;
+}
+
+.common-footer__description {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.common-footer__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #555;
+  font-size: 13px;
+}
+
+.common-footer__copyright {
+  color: #888;
+  font-size: 12px;
+}

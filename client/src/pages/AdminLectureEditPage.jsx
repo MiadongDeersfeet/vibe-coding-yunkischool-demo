@@ -4,6 +4,7 @@ import { apiUrl } from "../api";
 import { bearerAuthHeaders, jsonAuthHeaders } from "../api/authHeaders";
 import { isAdminSession } from "../auth/adminAccess";
 import AdminResultModal from "../components/AdminResultModal";
+import AdminTopNav from "../components/AdminTopNav";
 import "./AdminPage.css";
 
 const initialForm = {
@@ -45,7 +46,7 @@ function AdminLectureEditPage() {
     setResultModal((prev) => ({ ...prev, open: false }));
     if (navigateAfterModalCloseRef.current) {
       navigateAfterModalCloseRef.current = false;
-      navigate("/admin");
+      navigate("/admin/lectures");
     }
   };
 
@@ -185,7 +186,7 @@ function AdminLectureEditPage() {
       if (!res.ok) {
         throw new Error(data.message || "삭제에 실패했습니다.");
       }
-      navigate("/admin");
+      navigate("/admin/lectures");
     } catch (error) {
       showResultModal({
         variant: "error",
@@ -223,10 +224,11 @@ function AdminLectureEditPage() {
     <div className="admin-page">
       <div className="admin-header">
         <h1>{pageTitle}</h1>
-        <Link to="/admin" className="admin-home-link">
+        <Link to="/admin/lectures" className="admin-home-link">
           목록으로 돌아가기
         </Link>
       </div>
+      <AdminTopNav />
 
       <form className="admin-form" onSubmit={handleSubmit}>
         <label>

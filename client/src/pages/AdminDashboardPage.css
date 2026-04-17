@@ -1,0 +1,157 @@
+.admin-dashboard-page {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px 36px;
+}
+
+.admin-dashboard-page--gate {
+  min-height: 40vh;
+}
+
+.admin-dashboard-header h1 {
+  margin: 0;
+  color: #4c1d95;
+}
+
+.admin-dashboard-header p {
+  margin: 8px 0 0;
+  color: #555;
+}
+
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-kpi-card {
+  display: grid;
+  align-content: space-between;
+  gap: 6px;
+  padding: 16px;
+  min-height: 110px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-kpi-card span {
+  color: #666;
+  font-size: 13px;
+}
+
+.admin-kpi-card strong {
+  font-size: 21px;
+  color: #2f1c5a;
+}
+
+.admin-dashboard-panels {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-panel {
+  padding: 18px;
+  border: 1px solid #ece8ff;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-panel h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  color: #2f1c5a;
+}
+
+.admin-revenue-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.admin-revenue-row {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-revenue-label,
+.admin-revenue-value {
+  font-size: 13px;
+  color: #555;
+}
+
+.admin-revenue-track {
+  height: 9px;
+  border-radius: 999px;
+  background: #ede9fe;
+  overflow: hidden;
+}
+
+.admin-revenue-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+}
+
+.admin-status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.admin-status-item {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-status-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #333;
+}
+
+.admin-status-track {
+  height: 10px;
+  border-radius: 999px;
+  background: #ede9fe;
+  overflow: hidden;
+}
+
+.admin-status-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.admin-activity-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #444;
+  display: grid;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-dashboard-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}

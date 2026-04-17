@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { apiUrl } from "../api";
 import { bearerAuthHeaders } from "../api/authHeaders";
 import { isAdminSession } from "../auth/adminAccess";
 import AdminResultModal from "../components/AdminResultModal";
+import AdminTopNav from "../components/AdminTopNav";
 import "./AdminOrdersPage.css";
 
 const ORDER_STATUS_LABELS = {
@@ -87,16 +88,9 @@ function AdminOrdersPage() {
   return (
     <div className="admin-orders-page">
       <div className="admin-orders-header">
-        <h1>어드민 · 주문 관리</h1>
-        <div className="admin-orders-header-links">
-          <Link to="/admin" className="admin-orders-link">
-            상품관리
-          </Link>
-          <Link to="/" className="admin-orders-link">
-            메인으로 돌아가기
-          </Link>
-        </div>
+        <h1>주문 관리</h1>
       </div>
+      <AdminTopNav />
 
       <div className="admin-orders-tabs" role="tablist" aria-label="주문 유형 탭">
         <button

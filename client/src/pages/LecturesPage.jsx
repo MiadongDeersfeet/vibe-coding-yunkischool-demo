@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { apiUrl } from "../api";
 import "./LecturesPage.css";
 
@@ -17,6 +17,7 @@ const formatPrice = (value) =>
   `${new Intl.NumberFormat("ko-KR").format(Number(value) || 0)}원`;
 
 function LecturesPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeFilter, setActiveFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [lectures, setLectures] = useState([]);
@@ -24,6 +25,15 @@ function LecturesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const queryLanguageFilter = searchParams.get("language");
+
+  useEffect(() => {
+    const nextFilter = LANGUAGE_FILTERS.some((f) => f.key === queryLanguageFilter)
+      ? queryLanguageFilter
+      : "all";
+    setActiveFilter(nextFilter);
+    setPage(1);
+  }, [queryLanguageFilter]);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,6 +100,16 @@ function LecturesPage() {
     [activeFilter]
   );
 
+  const handleFilterChange = (filterKey) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (filterKey === "all") {
+      nextParams.delete("language");
+    } else {
+      nextParams.set("language", filterKey);
+    }
+    setSearchParams(nextParams);
+  };
+
   return (
     <div className="lectures-page">
       <div className="lectures-inner">
@@ -107,10 +127,7 @@ function LecturesPage() {
               key={filter.key}
               type="button"
               className={`lectures-tab-btn ${activeFilter === filter.key ? "is-active" : ""}`}
-              onClick={() => {
-                setActiveFilter(filter.key);
-                setPage(1);
-              }}
+              onClick={() => handleFilterChange(filter.key)}
             >
               {filter.label}
             </button>

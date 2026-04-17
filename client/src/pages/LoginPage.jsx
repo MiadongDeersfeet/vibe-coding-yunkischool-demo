@@ -121,8 +121,8 @@ function LoginPage() {
         </form>
 
         <div className="login-links">
-          <Link to="/signup">회원가입 하러 가기</Link>
-          <Link to="/">메인으로 돌아가기</Link>
+          <Link to="/signup">회원가입</Link>
+          <Link to="/">홈으로</Link>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ function LoginPage() {
         <div className="login-success-overlay" role="dialog" aria-modal="true">
           <div className="login-success-modal">
             <p className="success-badge">LOGIN SUCCESS</p>
-            <h2>{welcomeName}님, 로그인 성공!</h2>
+            <h2>{welcomeName}님, 환영합니다!</h2>
             <p>계속 진행하려면 다음 버튼을 눌러주세요.</p>
             <button
               type="button"

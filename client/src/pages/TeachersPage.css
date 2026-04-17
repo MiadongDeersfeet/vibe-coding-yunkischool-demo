@@ -1,0 +1,95 @@
+.teachers-page {
+  min-height: 100vh;
+  background: #f6f7fb;
+  padding: 26px 16px 48px;
+}
+
+.teachers-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.teachers-header {
+  margin-bottom: 20px;
+}
+
+.teachers-back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #5b21b6;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.teachers-back-link:hover {
+  text-decoration: underline;
+}
+
+.teachers-header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #2e1065;
+}
+
+.teachers-header p {
+  margin: 8px 0 0;
+  color: #6f6692;
+  font-size: 15px;
+}
+
+.teachers-list {
+  display: grid;
+  gap: 14px;
+}
+
+.teacher-card-section {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e7e1ff;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(76, 29, 149, 0.06);
+}
+
+.teacher-card-image-wrap {
+  width: 100%;
+}
+
+.teacher-card-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.teacher-role {
+  margin: 0 0 8px;
+  color: #5b21b6;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.teacher-card-content h2 {
+  margin: 0 0 10px;
+  color: #2e1065;
+  font-size: 22px;
+}
+
+.teacher-intro {
+  margin: 0;
+  color: #4d4d4d;
+  line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+  .teacher-card-section {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-card-image {
+    aspect-ratio: 16 / 10;
+  }
+}

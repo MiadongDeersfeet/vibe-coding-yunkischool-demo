@@ -335,6 +335,12 @@ function MyPage() {
                 )}
               </section>
             </div>
+
+            <section className="my-enter-classroom-section" aria-label="강의실 입장">
+              <Link to="/my-lectures" className="my-enter-classroom-btn">
+                강의실 입장
+              </Link>
+            </section>
           </>
         )}
       </div>

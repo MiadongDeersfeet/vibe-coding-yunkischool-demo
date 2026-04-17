@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiUrl } from "../api";
-import { bearerAuthHeaders, jsonAuthHeaders } from "../api/authHeaders";
+import { jsonAuthHeaders } from "../api/authHeaders";
 import { isAdminSession } from "../auth/adminAccess";
 import AdminResultModal from "../components/AdminResultModal";
+import AdminTopNav from "../components/AdminTopNav";
 import "./AdminPage.css";
 
 const initialLectureForm = {
@@ -41,15 +42,10 @@ const languageOptions = [
 const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "";
 const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "";
 
-function AdminPage() {
+function AdminPage({ defaultCategory = "lecture" }) {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState("lecture");
   const [lectureForm, setLectureForm] = useState(initialLectureForm);
   const [bookForm, setBookForm] = useState(initialBookForm);
-  const [lectures, setLectures] = useState([]);
-  const [books, setBooks] = useState([]);
-  const [listLoading, setListLoading] = useState(true);
-  const [listError, setListError] = useState("");
   const [resultModal, setResultModal] = useState({
     open: false,
     title: "",
@@ -58,6 +54,10 @@ function AdminPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [uploadingTarget, setUploadingTarget] = useState("");
+  const activeCategory = useMemo(
+    () => (defaultCategory === "book" ? "book" : "lecture"),
+    [defaultCategory]
+  );
 
   const closeResultModal = () => setResultModal((prev) => ({ ...prev, open: false }));
 
@@ -69,44 +69,6 @@ function AdminPage() {
       title: title || (variant === "error" ? "알림" : "완료"),
     });
   };
-
-  const loadProducts = useCallback(async () => {
-    setListError("");
-    setListLoading(true);
-    try {
-      const [lectureRes, bookRes] = await Promise.all([
-        fetch(apiUrl("/api/lectures")),
-        fetch(apiUrl("/api/books")),
-      ]);
-
-      if (!lectureRes.ok || !bookRes.ok) {
-        const lectureError = !lectureRes.ok
-          ? await lectureRes.json().catch(() => ({}))
-          : null;
-        const bookError = !bookRes.ok
-          ? await bookRes.json().catch(() => ({}))
-          : null;
-        throw new Error(
-          lectureError?.message || bookError?.message || "목록을 불러오지 못했습니다."
-        );
-      }
-
-      const [lectureData, bookData] = await Promise.all([lectureRes.json(), bookRes.json()]);
-      setLectures(Array.isArray(lectureData) ? lectureData : []);
-      setBooks(Array.isArray(bookData) ? bookData : []);
-    } catch (err) {
-      setListError(err.message || "목록을 불러오지 못했습니다.");
-      setLectures([]);
-      setBooks([]);
-    } finally {
-      setListLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isAdminSession()) return;
-    loadProducts();
-  }, [loadProducts]);
 
   const handleLectureChange = (event) => {
     const { name, value } = event.target;
@@ -253,7 +215,6 @@ function AdminPage() {
         message: "강의가 등록되었습니다.",
       });
       setLectureForm(initialLectureForm);
-      await loadProducts();
     } catch (err) {
       showResultModal({
         variant: "error",
@@ -298,7 +259,6 @@ function AdminPage() {
         message: "도서가 등록되었습니다.",
       });
       setBookForm(initialBookForm);
-      await loadProducts();
     } catch (err) {
       showResultModal({
         variant: "error",
@@ -309,47 +269,6 @@ function AdminPage() {
       setSubmitting(false);
     }
   };
-
-  const handleDeleteLecture = async (id) => {
-    if (!window.confirm("이 강의를 삭제할까요?")) {
-      return;
-    }
-    try {
-      const res = await fetch(apiUrl(`/api/lectures/${id}`), {
-        method: "DELETE",
-        headers: bearerAuthHeaders(),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "삭제에 실패했습니다.");
-      }
-      await loadProducts();
-    } catch (err) {
-      setListError(err.message || "삭제에 실패했습니다.");
-    }
-  };
-
-  const handleDeleteBook = async (id) => {
-    if (!window.confirm("이 도서를 삭제할까요?")) {
-      return;
-    }
-    try {
-      const res = await fetch(apiUrl(`/api/books/${id}`), {
-        method: "DELETE",
-        headers: bearerAuthHeaders(),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "삭제에 실패했습니다.");
-      }
-      await loadProducts();
-    } catch (err) {
-      setListError(err.message || "삭제에 실패했습니다.");
-    }
-  };
-
-  const formatPrice = (n) =>
-    `${new Intl.NumberFormat("ko-KR").format(Number(n) || 0)}원`;
 
   if (!isAdminSession()) {
     return (
@@ -368,43 +287,9 @@ function AdminPage() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1>어드민 · 상품 등록</h1>
-        <div className="admin-header-links">
-          <Link to="/admin/orders" className="admin-home-link">
-            주문관리
-          </Link>
-          <Link to="/" className="admin-home-link">
-            메인으로 돌아가기
-          </Link>
-        </div>
+        <h1>{activeCategory === "lecture" ? "강의 등록" : "도서 등록"}</h1>
       </div>
-
-      <div className="admin-category-tabs" role="tablist" aria-label="등록 카테고리 선택">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeCategory === "lecture"}
-          className={`admin-category-tab ${activeCategory === "lecture" ? "is-active" : ""}`}
-          onClick={() => {
-            closeResultModal();
-            setActiveCategory("lecture");
-          }}
-        >
-          강의 등록
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeCategory === "book"}
-          className={`admin-category-tab ${activeCategory === "book" ? "is-active" : ""}`}
-          onClick={() => {
-            closeResultModal();
-            setActiveCategory("book");
-          }}
-        >
-          도서 등록
-        </button>
-      </div>
+      <AdminTopNav />
 
       {activeCategory === "lecture" ? (
         <form className="admin-form" onSubmit={handleLectureSubmit}>
@@ -463,12 +348,12 @@ function AdminPage() {
           </label>
 
           <label>
-            카테고리 이름 (선택, 비우면 서버에서 &quot;미분류&quot;)
+            카테고리 이름
             <input name="categoryName" value={lectureForm.categoryName} onChange={handleLectureChange} placeholder="한국어 입문" />
           </label>
 
           <label>
-            카테고리 ID (선택, Mongo ObjectId 문자열. 비우면 서버에서 자동 생성)
+            카테고리 ID (자동생성)
             <input name="categoryId" value={lectureForm.categoryId} onChange={handleLectureChange} placeholder="674a1b2c3d4e5f6789012345" />
           </label>
 
@@ -546,67 +431,6 @@ function AdminPage() {
           </button>
         </form>
       )}
-
-      <section className="admin-list-section" aria-label="등록된 상품 목록">
-        <div className="admin-list-head">
-          <h2>{activeCategory === "lecture" ? "등록된 강의" : "등록된 도서"}</h2>
-          <button type="button" className="admin-refresh-btn" onClick={() => loadProducts()}>
-            새로고침
-          </button>
-        </div>
-        {listError ? <p className="admin-list-error">{listError}</p> : null}
-        {listLoading ? (
-          <p className="admin-list-empty">불러오는 중…</p>
-        ) : activeCategory === "lecture" ? (
-          lectures.length === 0 ? (
-            <p className="admin-list-empty">등록된 강의가 없습니다.</p>
-          ) : (
-          <ul className="admin-lecture-list">
-            {lectures.map((lec) => (
-              <li key={lec._id} className="admin-lecture-row">
-                <div className="admin-lecture-main">
-                  <strong>{lec.title}</strong>
-                  <span className="admin-lecture-meta">
-                    {lec.languageKey || "—"} · {lec.instructorName} · {formatPrice(lec.price)}
-                  </span>
-                </div>
-                <div className="admin-lecture-actions">
-                  <Link to={`/admin/lectures/${lec._id}/edit`} className="admin-edit-link">
-                    수정
-                  </Link>
-                  <button type="button" className="admin-delete-btn" onClick={() => handleDeleteLecture(lec._id)}>
-                    삭제
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-          )
-        ) : books.length === 0 ? (
-          <p className="admin-list-empty">등록된 도서가 없습니다.</p>
-        ) : (
-          <ul className="admin-lecture-list">
-            {books.map((book) => (
-              <li key={book._id} className="admin-lecture-row">
-                <div className="admin-lecture-main">
-                  <strong>{book.title}</strong>
-                  <span className="admin-lecture-meta">
-                    {book.subtitle || "—"} · {book.authorName} · {formatPrice(book.price)}
-                  </span>
-                </div>
-                <div className="admin-lecture-actions">
-                  <Link to={`/admin/books/${book._id}/edit`} className="admin-edit-link">
-                    수정
-                  </Link>
-                  <button type="button" className="admin-delete-btn" onClick={() => handleDeleteBook(book._id)}>
-                    삭제
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
 
       <AdminResultModal
         open={resultModal.open}

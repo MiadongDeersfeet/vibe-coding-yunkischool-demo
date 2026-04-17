@@ -8,7 +8,6 @@ const initialForm = {
   name: "",
   password: "",
   confirmPassword: "",
-  user_role: "student",
 };
 
 const emailRegex = /^\S+@\S+\.\S+$/;
@@ -80,7 +79,7 @@ function SignupPage() {
       <div className="signup-card">
         <div className="signup-header">
           <h1>회원가입</h1>
-          <p>이메일, 이름, 비밀번호, 사용자 역할을 입력해주세요.</p>
+          <p>이메일, 이름, 비밀번호를 입력해주세요.</p>
         </div>
 
         <form className="signup-form" onSubmit={onSubmit}>
@@ -132,14 +131,6 @@ function SignupPage() {
               placeholder="비밀번호와 동일하게 입력"
               required
             />
-          </label>
-
-          <label>
-            사용자 역할
-            <select name="user_role" value={form.user_role} onChange={onChange} required>
-              <option value="student">student</option>
-              <option value="teacher">teacher</option>
-            </select>
           </label>
 
           {errorMessage ? <p className="form-message error">{errorMessage}</p> : null}
