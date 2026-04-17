@@ -59,7 +59,7 @@ const getLectures = async (req, res) => {
   try {
     const filter = {};
 
-    const { categoryId, isActive, languageKey } = req.query;
+    const { categoryId, isActive, languageKey, page, pageSize } = req.query;
     if (categoryId) {
       if (!mongoose.Types.ObjectId.isValid(String(categoryId))) {
         return res.status(400).json({ message: "categoryId가 유효하지 않습니다." });
@@ -73,8 +73,43 @@ const getLectures = async (req, res) => {
       filter.isActive = isActive === "true";
     }
 
-    const lectures = await Lecture.find(filter).sort({ createdAt: -1 });
-    res.status(200).json(lectures);
+    const hasPagination = page !== undefined || pageSize !== undefined;
+    const parsedPage = Number.parseInt(String(page ?? "1"), 10);
+    const parsedPageSize = Number.parseInt(String(pageSize ?? "20"), 10);
+    const safePage = Number.isNaN(parsedPage) ? 1 : parsedPage;
+    const safePageSize = Number.isNaN(parsedPageSize) ? 20 : parsedPageSize;
+
+    if (hasPagination && safePage < 1) {
+      return res.status(400).json({ message: "page는 1 이상의 정수여야 합니다." });
+    }
+    if (hasPagination && (safePageSize < 1 || safePageSize > 100)) {
+      return res.status(400).json({ message: "pageSize는 1~100 범위의 정수여야 합니다." });
+    }
+
+    if (!hasPagination) {
+      const lectures = await Lecture.find(filter).sort({ createdAt: -1 });
+      return res.status(200).json(lectures);
+    }
+
+    const skip = (safePage - 1) * safePageSize;
+    const [lectures, total] = await Promise.all([
+      Lecture.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(safePageSize),
+      Lecture.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.max(1, Math.ceil(total / safePageSize));
+    res.status(200).json({
+      items: lectures,
+      pagination: {
+        page: safePage,
+        pageSize: safePageSize,
+        total,
+        totalPages,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "강의 목록 조회에 실패했습니다." });
   }
