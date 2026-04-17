@@ -379,10 +379,6 @@ function AdminPage() {
         </div>
       </div>
 
-      <p className="admin-description">
-        강의/도서 카테고리를 선택해 등록할 수 있습니다. 이미지 URL은 직접 입력하거나 Cloudinary 위젯으로 업로드할 수 있습니다.
-      </p>
-
       <div className="admin-category-tabs" role="tablist" aria-label="등록 카테고리 선택">
         <button
           type="button"
