@@ -14,7 +14,6 @@ function BooksPage() {
   const [activeFilter, setActiveFilter] = useState("전체");
   const [page, setPage] = useState(0);
   const prevActiveFilterRef = useRef(activeFilter);
-  const [viewType, setViewType] = useState("list");
   const [likedBookIds, setLikedBookIds] = useState([]);
   const [actionMessage, setActionMessage] = useState("");
   const [displayBooks, setDisplayBooks] = useState(() => mergeBooksForDisplay([]));
@@ -145,8 +144,8 @@ function BooksPage() {
           <Link to="/" className="books-back-link">
             ← 메인으로
           </Link>
-          <h1>온라인 일간 베스트 · 외국어 도서</h1>
-          <p>베스트셀러 스타일로 정렬된 전체 도서 목록입니다.</p>
+          <h1>윤기스쿨 서점</h1>
+          <p>선생님들이 수업에서 실제로 사용하는 교재입니다.</p>
         </header>
 
         <nav className="books-filter-tabs" aria-label="도서 부제(카테고리) 필터">
@@ -162,29 +161,13 @@ function BooksPage() {
           ))}
         </nav>
 
-        <section className="books-toolbar" aria-label="정렬 및 보기 옵션">
+        <section className="books-toolbar" aria-label="도서 목록 정보">
           <p>
             총 <strong>{visibleBooks.length}</strong>권
           </p>
-          <div className="books-toolbar-actions">
-            <button
-              type="button"
-              className={`books-view-btn ${viewType === "list" ? "is-active" : ""}`}
-              onClick={() => setViewType("list")}
-            >
-              리스트형
-            </button>
-            <button
-              type="button"
-              className={`books-view-btn ${viewType === "grid" ? "is-active" : ""}`}
-              onClick={() => setViewType("grid")}
-            >
-              썸네일형
-            </button>
-          </div>
         </section>
 
-        <section className={`books-results ${viewType === "grid" ? "grid-view" : "list-view"}`} aria-label="전체 도서">
+        <section className="books-results list-view" aria-label="전체 도서">
           {pagedBooks.map((book, index) => (
             <article key={book.id} className="books-item">
               <Link to={`/books/${book.id}`} className="books-item-main">

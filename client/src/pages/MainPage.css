@@ -20,35 +20,79 @@ body {
 .main-page {
   max-width: 1220px;
   margin: 0 auto;
-  padding: 18px 16px 48px;
+  padding: 0 16px 48px;
 }
 
 .top-header {
-  display: grid;
-  grid-template-columns: 170px 1fr auto;
-  align-items: center;
-  gap: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  background: #fff;
+  border: 1px solid #ece8ff;
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  box-shadow: 0 8px 22px rgba(17, 17, 17, 0.06);
+  padding: 12px max(16px, calc((100vw - 1220px) / 2 + 16px));
   margin-bottom: 18px;
+}
+
+.top-header-top {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+
+.top-header-branding {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+
+.brand-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #e4dcff;
+  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand {
   font-weight: 800;
+  font-size: 38px;
+  line-height: 1;
   letter-spacing: 0.04em;
   color: #4c1d95;
 }
 
-.search-input {
-  height: 40px;
-  border-radius: 999px;
-  border: 1px solid #ded8fb;
-  padding: 0 16px;
-  background: #fff;
-  outline: none;
-}
-
-.search-input:focus {
-  border-color: #8758ff;
-  box-shadow: 0 0 0 3px rgba(135, 88, 255, 0.15);
+.brand-subtitle {
+  margin: 0;
+  color: #7a689b;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .signin-btn {
@@ -72,9 +116,10 @@ body {
 }
 
 .welcome-text {
-  margin: 0 0 16px;
+  margin: 0;
   color: #6d28d9;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .quick-menu-row {
@@ -212,6 +257,21 @@ body {
 .language-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
+}
+
+.guide-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.guide-grid .thumb {
+  aspect-ratio: 3 / 4;
+  background: #fff;
+}
+
+.guide-grid .card-thumb-image {
+  object-fit: contain;
+  padding: 8px;
 }
 
 .language-card {
@@ -388,7 +448,30 @@ body {
 
 @media (max-width: 860px) {
   .top-header {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .top-header-branding {
+    justify-items: center;
+  }
+
+  .top-header-top {
+    justify-items: center;
+  }
+
+  .brand-logo-wrap {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand {
+    font-size: 32px;
+  }
+
+  .brand-subtitle {
+    font-size: 12px;
   }
 
   .quick-menu-row {

@@ -1,0 +1,17 @@
+:root {
+  --main-bg: #f6f7fb;
+  --main-bg-soft: #faf9ff;
+  --main-border: #ece8ff;
+  --main-border-strong: #ded8fb;
+  --main-title: #4c1d95;
+  --main-primary: #6d28d9;
+  --main-primary-strong: #5b21b6;
+  --main-text: #161616;
+  --main-muted: #666;
+}
+
+body {
+  margin: 0;
+  background: var(--main-bg);
+  color: var(--main-text);
+}

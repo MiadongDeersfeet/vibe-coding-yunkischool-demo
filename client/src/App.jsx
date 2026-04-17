@@ -8,6 +8,7 @@ import LanguageLecturesPage from "./pages/LanguageLecturesPage";
 import AdminLectureEditPage from "./pages/AdminLectureEditPage";
 import AdminBookEditPage from "./pages/AdminBookEditPage";
 import LanguageLectureDetailPage from "./pages/LanguageLectureDetailPage";
+import LecturesPage from "./pages/LecturesPage";
 import BooksPage from "./pages/BooksPage";
 import BookDetailPage from "./pages/BookDetailPage";
 import OrderCheckoutPage from "./pages/OrderCheckoutPage";
@@ -34,6 +35,7 @@ function App() {
       <Route path="/books" element={<BooksPage />} />
       <Route path="/books/:bookId" element={<BookDetailPage />} />
       <Route path="/order/:kind/:id" element={<OrderCheckoutPage />} />
+      <Route path="/lectures" element={<LecturesPage />} />
       <Route path="/lectures/:languageKey" element={<LanguageLecturesPage />} />
       <Route path="/lectures/:languageKey/:lectureId" element={<LanguageLectureDetailPage />} />
       <Route path="/login" element={<LoginPage />} />
