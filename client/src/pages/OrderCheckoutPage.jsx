@@ -464,7 +464,7 @@ function OrderCheckoutPage() {
           </Link>
           <h1>주문하기</h1>
           <p className="order-checkout-muted">
-            {mode === "lecture" ? "온라인 강의" : "도서"} 주문서입니다. 금액은 서버에 등록된 가격으로 확정됩니다.
+            {mode === "lecture" ? "온라인 강의" : "도서"} 
           </p>
         </header>
 
