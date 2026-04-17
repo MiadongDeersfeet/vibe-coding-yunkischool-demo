@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./AdminTopNav.css";
 
 const adminNavItems = [
@@ -14,18 +14,23 @@ const adminNavItems = [
 function AdminTopNav() {
   return (
     <nav className="admin-top-nav" aria-label="어드민 메뉴">
-      {adminNavItems.map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          end={item.end}
-          className={({ isActive }) =>
-            `admin-top-nav__item ${isActive ? "is-active" : ""}`
-          }
-        >
-          {item.label}
-        </NavLink>
-      ))}
+      <div className="admin-top-nav__items">
+        {adminNavItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={({ isActive }) =>
+              `admin-top-nav__item ${isActive ? "is-active" : ""}`
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </div>
+      <Link to="/" className="admin-top-nav__home">
+        홈으로
+      </Link>
     </nav>
   );
 }

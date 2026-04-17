@@ -1,8 +1,15 @@
 .admin-top-nav {
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0 20px;
+}
+
+.admin-top-nav__items {
+  display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 16px 0 20px;
 }
 
 .admin-top-nav__item {
@@ -23,4 +30,19 @@
   background: #6d28d9;
   border-color: #6d28d9;
   color: #fff;
+}
+
+.admin-top-nav__home {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #d1fae5;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
